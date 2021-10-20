@@ -1,12 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { randomBytes } = require("crypto");
+const cors = require("cors");
 
 const app = express();
 
 // parsers
 // app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors());
 
 // object for all comments for specific post
 const commentsByIdPost = {};
@@ -29,5 +31,5 @@ app.post("/posts/:id/comments", (req, res) => {
 
 // cant have same port at post 4000
 app.listen(4001, () => {
-  console.log("Lisenting on 4001");
+  console.log("Lisenting on 4001...");
 });

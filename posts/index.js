@@ -4,9 +4,17 @@ const { randomBytes } = require("crypto");
 
 const app = express();
 // parsers all reqs sent from post to ensure json file is parsed into normal text
-
+// source code for cors as not working for some reason
+app.use(function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  next();
+});
 // app.use(express.urlencoded({ extended: true }));
 // app.use(express.json());
+// when you use app.use => middleware
 app.use(bodyParser.json());
 
 // stores all the posts
@@ -30,6 +38,6 @@ app.post("/posts", (req, res) => {
   res.status(201).send(posts[id]);
 });
 
-app.listen(4000, () => {
-  console.log("listening on port 4000");
+app.listen(4003, () => {
+  console.log("listening on port 4003...");
 });
