@@ -12,12 +12,12 @@ app.use(bodyParser.json());
 const commentsByIdPost = {};
 
 // get request
-app.get("posts/:id/comments", (req, res) => {
+app.get("/posts/:id/comments", (req, res) => {
   res.send(commentsByIdPost[req.params.id]) || [];
 });
 
 // post request
-app.post("posts/:id/comments", (req, res) => {
+app.post("/posts/:id/comments", (req, res) => {
   const commentId = randomBytes(4).toString("hex");
   const { content } = req.body;
   // if there is a mistake if req.params.id doesnt work

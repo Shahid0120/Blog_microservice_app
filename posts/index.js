@@ -15,7 +15,6 @@ const posts = {};
 app.get("/posts", (req, res) => {
   // if anyone send a get request
   // send back all posts
-  // poo
   res.send(posts);
 });
 
