@@ -1,15 +1,17 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const { randomBytes } = require("crypto");
 
 const app = express();
 // parsers all reqs sent from post to ensure json file is parsed into normal text
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+app.use(bodyParser.json());
 
 // stores all the posts
 const posts = {};
-
+//
 app.get("/posts", (req, res) => {
   // if anyone send a get request
   // send back all posts
