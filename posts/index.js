@@ -1,17 +1,19 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const { randomBytes } = require("crypto");
 
 const app = express();
 // parsers all reqs sent from post to ensure json file is parsed into normal text
-app.use(bodyParser.json());
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // stores all the posts
 const posts = {};
 
-app.get("/post", (req, res) => {
+app.get("/posts", (req, res) => {
   // if anyone send a get request
   // send back all posts
+  // poo
   res.send(posts);
 });
 
@@ -24,7 +26,7 @@ app.post("/posts", (req, res) => {
     id,
     title,
   };
-  res.status(201).send(post[id]);
+  res.status(201).send(posts[id]);
 });
 
 app.listen(4000, () => {
