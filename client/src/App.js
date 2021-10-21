@@ -2,7 +2,6 @@ import axios from "axios";
 import React from "react";
 import PostCreate from "./PostCreate";
 import PostList from "./PostList";
-
 import { useState, useEffect } from "react";
 
 function App() {

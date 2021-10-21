@@ -15,6 +15,8 @@ function PostCreate() {
       title,
     });
     setTitle(" ");
+    // refresh window
+    window.location.reload(false);
     //axios.post
   };
 
