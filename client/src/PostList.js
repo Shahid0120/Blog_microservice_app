@@ -1,34 +1,31 @@
-import axios from "axios";
-import React, { useEffect } from "react";
-import { useState } from "react";
-import CommentList from "./CommentList";
-import CommentCreate from "./CommentCreate";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import CommentCreate from './CommentCreate';
+import CommentList from './CommentList';
 
-function PostList() {
-  const [post, setPost] = useState({});
+export default () => {
+  const [posts, setPosts] = useState({});
+
+  const fetchPosts = async () => {
+    const res = await axios.get('http://localhost:4002/posts');
+
+    setPosts(res.data);
+  };
 
   useEffect(() => {
     fetchPosts();
   }, []);
 
-  const fetchPosts = async () => {
-    const res = await axios.get("http://localhost:4010/posts");
-    // console.log(res.data);
-    setPost(res.data);
-  };
-
-  // what does object.value do =>
-  const renderedPost = Object.values(post).map((post) => {
+  const renderedPosts = Object.values(posts).map(post => {
     return (
       <div
         className="card"
-        style={{ width: "30%", marginBottom: "20px" }}
-        // react is  expecting unique value for each map value
+        style={{ width: '30%', marginBottom: '20px' }}
         key={post.id}
       >
         <div className="card-body">
           <h3>{post.title}</h3>
-          <CommentList postId={post.id} />
+          <CommentList comments={post.comments} />
           <CommentCreate postId={post.id} />
         </div>
       </div>
@@ -37,9 +34,7 @@ function PostList() {
 
   return (
     <div className="d-flex flex-row flex-wrap justify-content-between">
-      {renderedPost}
+      {renderedPosts}
     </div>
   );
-}
-
-export default PostList;
+};

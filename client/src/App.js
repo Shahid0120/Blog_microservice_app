@@ -1,21 +1,15 @@
-import axios from "axios";
-import React from "react";
-import PostCreate from "./PostCreate";
-import PostList from "./PostList";
-import { useState, useEffect } from "react";
+import React from 'react';
+import PostCreate from './PostCreate';
+import PostList from './PostList';
 
-function App() {
-  const [post, setPost] = useState(" ");
-
+export default () => {
   return (
     <div className="container">
       <h1>Create Post</h1>
       <PostCreate />
       <hr />
-      <h1>Post</h1>
+      <h1>Posts</h1>
       <PostList />
     </div>
   );
-}
-
-export default App;
+};

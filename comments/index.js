@@ -1,47 +1,70 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const { randomBytes } = require("crypto");
-const cors = require("cors");
-const axios = require("axios");
-const app = express();
+const express = require('express');
+const bodyParser = require('body-parser');
+const { randomBytes } = require('crypto');
+const cors = require('cors');
+const axios = require('axios');
 
-// parsers
-// app.use(express.urlencoded({ extended: true }));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+const app = express();
+app.use(bodyParser.json());
 app.use(cors());
 
-// object for all comments for specific post
-const commentsByIdPost = {};
+const commentsByPostId = {};
 
-// get request
-app.get("/posts/:id/comments", (req, res) => {
-  res.send(commentsByIdPost[req.params.id]) || [];
+app.get('/posts/:id/comments', (req, res) => {
+  res.send(commentsByPostId[req.params.id] || []);
 });
 
-// post request
-app.post("/posts/:id/comments", async (req, res) => {
-  const commentId = randomBytes(4).toString("hex");
+app.post('/posts/:id/comments', async (req, res) => {
+  const commentId = randomBytes(4).toString('hex');
   const { content } = req.body;
-  // if there is a mistake if req.params.id doesnt work
-  const comments = commentsByIdPost[req.params.id] || [];
 
-  comments.push({ id: commentId, content });
+  const comments = commentsByPostId[req.params.id] || [];
 
-  commentsByIdPost[req.params.id] = comments;
-  // for message bus
-  await axios.post("http://localhost:4005/events", {
-    type: "CommentCreated",
+  comments.push({ id: commentId, content, status: 'pending' });
+
+  commentsByPostId[req.params.id] = comments;
+
+  await axios.post('http://localhost:4005/events', {
+    type: 'CommentCreated',
     data: {
       id: commentId,
       content,
       postId: req.params.id,
-    },
+      status: 'pending'
+    }
   });
+
   res.status(201).send(comments);
 });
 
-// cant have same port at post 4000
+app.post('/events', async (req, res) => {
+  console.log('Event Received:', req.body.type);
+
+  const { type, data } = req.body;
+
+  if (type === 'CommentModerated') {
+    const { postId, id, status, content } = data;
+    const comments = commentsByPostId[postId];
+
+    const comment = comments.find(comment => {
+      return comment.id === id;
+    });
+    comment.status = status;
+
+    await axios.post('http://localhost:4005/events', {
+      type: 'CommentUpdated',
+      data: {
+        id,
+        status,
+        postId,
+        content
+      }
+    });
+  }
+
+  res.send({});
+});
+
 app.listen(4001, () => {
-  console.log("Lisenting on 4001...");
+  console.log('Listening on 4001');
 });
