@@ -10,8 +10,10 @@ function PostList() {
   useEffect(() => {
     fetchPosts();
   }, []);
+
   const fetchPosts = async () => {
-    const res = await axios.get("http://localhost:4003/posts");
+    const res = await axios.get("http://localhost:4010/posts");
+    // console.log(res.data);
     setPost(res.data);
   };
 
@@ -35,7 +37,6 @@ function PostList() {
 
   return (
     <div className="d-flex flex-row flex-wrap justify-content-between">
-      <h1>hi</h1>
       {renderedPost}
     </div>
   );
