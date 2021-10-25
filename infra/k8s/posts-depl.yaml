@@ -1,0 +1,23 @@
+# deploymened is inside bucket of different object => apps
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-depl
+spec:
+  # numbeder of pods we wanna create within the deployment pod
+  replicas: 1
+  # deployments have difficult time finding which pods to manager
+  # selector => tells which name pod to manager aka "pods"
+  # same as template => configuration of pod from deployemnt creation
+  selector:
+    matchLabels:
+      app: posts
+  # similar to pod creation byitself i.e "post.yaml" everything after this
+  template:
+    metadata:
+      labels:
+        app: posts
+    spec:
+      containers:
+        - name: posts
+          image: shahidh1012:posts
