@@ -9,15 +9,31 @@ spec:
   # deployments have difficult time finding which pods to manager
   # selector => tells which name pod to manager aka "pods"
   # same as template => configuration of pod from deployemnt creation
+  # similar to className in css
   selector:
     matchLabels:
       app: posts
   # similar to pod creation byitself i.e "post.yaml" everything after this
   template:
     metadata:
+      # similar to className in css
       labels:
         app: posts
     spec:
       containers:
         - name: posts
           image: shahidh1012:posts
+# cluster IP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-clusterip-srv
+spec:
+  selector:
+    app: posts
+  ports:
+    - name: posts
+      protocol: TCP
+      port: 4000
+      targetPort: 4000
